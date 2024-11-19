@@ -1,0 +1,132 @@
+---
+title: "Suitable places for electric charging stations in Erie County"
+author: Nicholas Genco
+subtitle: Subtitle here if desired
+date: today
+date-format: long
+---
+
+# Introduction
+
+\[\~ 200 words\]
+
+For my project, I want to look at where are the best places would be to put electric
+charging stations. With electric vehicles becoming more popular, there is a growing demand for
+charging stations and I want to know the best locations for them. Are streets, parking lots, homes
+or sidewalks the best place to install them. I also would like to look at the specific locations that
+they will go in to decide how many charging stations will be needed to fulfill the number of cars
+that are present. The specific location I will be looking at for my project is the north eastern part of Erie County. I am looking at potentially identifying large parking lots (example Boulevard Consumer Plaza) as one of the ideal places to have charging stations.
+
+# Materials and methods
+
+\[\~ 200 words\]
+
+This first line of code shows the nearest electric charging stations across Erie County New York. There are certain areas in the county that have little to no electric charging stations including Kenmore, Lackawanna, areas south of Hamburg, Buffalo's East Side and areas east of Amherst and Williamsville. Areas that have a good amount of electric charging stations include parts of Downtown Buffalo, Cheektowaga, and Amherst. 
+
+st_read(nearest_stations(
+  ks60c5Uh2qpQzMoHhE3sdcYP68uJkspEFZOpd6Z2,
+  location = Erie County,
+  latitude = 42.6975° N,
+  longitude = 78.7476° W,
+  radius = "infinite",
+  params = nrel_params(radius = "infinite")
+))
+
+Data: The underlying data are publicly accessible via the web and downloaded/accessed within the Rmd script. If you want to use your own data, you must make it available on a website (e.g. Figshare) so that others are able to re-run your code.
+
+You can do bullets like this:
+
+-   The first most important thing
+-   The second most important thing
+-   The third most important thing
+
+You can do numbers like this:
+
+1.  The first most important thing
+2.  The second most important thing
+3.  The third most important thing
+
+See <http://rmarkdown.rstudio.com/> for all the amazing things you can do.
+
+Here's my first code chunk.
+
+```{r}
+x=3+4
+```
+
+Refer to output in your narrative like this: x=`r x` .
+
+Load any required packages in a code chunk (you may need to install some packages):
+
+```{r, message=F, warning=F}
+library(tidyverse)
+library(leaflet)
+library(kableExtra)
+library(htmlwidgets)
+library(widgetframe)
+knitr::opts_chunk$set(widgetframe_widgets_dir = 'widgets' ) 
+knitr::opts_chunk$set(cache=TRUE)  # cache the results for quick compiling
+```
+
+## Download and clean all required data
+
+```{r}
+n=20
+data=data.frame(x=runif(n,-180,180),
+                y=runif(n,-60,60),
+                size = runif(n, 5, 20),
+                category = factor(
+                  sample(letters[1:5], n, replace = TRUE)
+                  ),
+                value = rnorm(n))
+```
+
+```{r, results='asis'}
+data %>% 
+  slice(1:10) %>% #show only 1:n rows
+  kable(digits=2,align="c")%>% #make table and round to two digits
+  kable_styling(bootstrap_options = 
+                  c("striped", "hover", "condensed", "responsive")) #apply other formatting
+```
+
+Add any additional processing steps here.
+
+# Results
+
+\[\~200 words\]
+
+Tables and figures (maps and other graphics) are carefully planned to convey the results of your analysis. Intense exploration and evidence of many trials and failures. The author looked at the data in many different ways before coming to the final presentation of the data.
+
+Show tables, plots, etc. and describe them.
+
+```{r, fig.width=6, fig.height=3, fig.cap="Map of completely random data"}
+m <- leaflet(data) %>% 
+  addTiles() %>% 
+  addCircleMarkers(~x, ~y, radius = ~size,color = ~as.factor(category)) %>% 
+  addPopups(~x[2], ~y[2], "Random popup")
+m  # a map with the default OSM tile layer
+```
+
+```{r}
+data %>% 
+  ggplot(aes(x=x,y=y,col=category))+
+  geom_point()
+```
+
+### Dygraphs Example
+
+```{r}
+library(dygraphs)
+dygraph(nhtemp, main = "New Haven Temperatures") |> 
+  dyRangeSelector(dateWindow = c("1920-01-01", "1960-01-01")) 
+```
+
+# Conclusions
+
+\[\~200 words\]
+
+Clear summary adequately describing the results and putting them in context. Discussion of further questions and ways to continue investigation.
+
+# References
+
+All sources are cited in a consistent manner
