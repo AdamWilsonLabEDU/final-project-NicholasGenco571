@@ -4,6 +4,8 @@ author: Nicholas Genco
 subtitle: Subtitle here if desired
 date: today
 date-format: long
+editor_options: 
+  chunk_output_type: console
 ---
 
 # Introduction
@@ -22,15 +24,17 @@ that are present. The specific location I will be looking at for my project is t
 \[\~ 200 words\]
 
 This first line of code shows the nearest electric charging stations across Erie County New York. There are certain areas in the county that have little to no electric charging stations including Kenmore, Lackawanna, areas south of Hamburg, Buffalo's East Side and areas east of Amherst and Williamsville. Areas that have a good amount of electric charging stations include parts of Downtown Buffalo, Cheektowaga, and Amherst. 
-
-st_read(nearest_stations(
-  ks60c5Uh2qpQzMoHhE3sdcYP68uJkspEFZOpd6Z2,
-  location = Erie County,
-  latitude = 42.6975° N,
-  longitude = 78.7476° W,
-  radius = "infinite",
-  params = nrel_params(radius = "infinite")
+```{r}
+library(sf)
+library(altfuelr)
+(nearest_stations(
+  "ks60c5Uh2qpQzMoHhE3sdcYP68uJkspEFZOpd6Z2",
+  latitude = 42.6975,
+  longitude = -78.7476,
+  radius = 300,
+  params = nrel_params(fuel_type = "ELEC")
 ))
+```
 
 Data: The underlying data are publicly accessible via the web and downloaded/accessed within the Rmd script. If you want to use your own data, you must make it available on a website (e.g. Figshare) so that others are able to re-run your code.
 
