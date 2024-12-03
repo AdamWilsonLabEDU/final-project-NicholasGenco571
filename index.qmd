@@ -1,26 +1,52 @@
 ---
-title: "My Final Project Template"
+title: "Suitable places for electric charging stations in Erie County"
 author: Nicholas Genco
 subtitle: Subtitle here if desired
 date: today
 date-format: long
+editor_options: 
+  chunk_output_type: console
 ---
 
 # Introduction
 
 \[\~ 200 words\]
 
-Clearly stated background and questions / hypotheses / problems being addressed. Sets up the analysis in an interesting and compelling way. Include figures if you like.
+For my project, I want to look at where are the best places would be to put electric
+charging stations. With electric vehicles becoming more popular, there is a growing demand for
+charging stations and I want to know the best locations for them. Are streets, parking lots, homes
+or sidewalks the best place to install them. I also would like to look at the specific locations that
+they will go in to decide how many charging stations will be needed to fulfill the number of cars
+that are present. The specific location I will be looking at for my project is the north eastern part of Erie County. I am looking at potentially identifying large parking lots (example Boulevard Consumer Plaza) as one of the ideal places to have charging stations.
 
 # Materials and methods
 
 \[\~ 200 words\]
 
-Narrative: Clear narrative description of the data sources and methods. Includes data from at least two sources that were integrated / merged in R.
+This first line of code shows the nearest electric charging stations across Erie County New York. There are certain areas in the county that have little to no electric charging stations including Kenmore, Lackawanna, areas south of Hamburg, Buffalo's East Side and areas east of Amherst and Williamsville. Areas that have a good amount of electric charging stations include parts of Downtown Buffalo, Cheektowaga, and Amherst. 
+```{r}
+library(sf)
+library(altfuelr)
+library(tidycensus)
+(nearest_stations(
+  "ks60c5Uh2qpQzMoHhE3sdcYP68uJkspEFZOpd6Z2",
+  latitude = 42.6975,
+  longitude = -78.7476,
+  radius = 300,
+  params = nrel_params(fuel_type = "ELEC")
+))
+```
+```{r}
+options(tigris_use_cache = TRUE)
+erie <- get_decennial(geography = "block", variables = income,
+                      state = "NY", county = "Erie County", geometry = TRUE,
+                      sumfile = "pl", cache_table=T) 
+library(mapview)
+mapview(erie_point_race, zcol = "variable", legend = TRUE)
+```
 
-Code: The code associated with the project is well organized and easy to follow. Demonstrates mastery of R graphics and functions.
 
-Data: The underlying data are publicly accessible via the web and downloaded/accessed within the Rmd script. If you want to use your own data, you must make it available on a website (e.g. Figshare) so that others are able to re-run your code.
+Data: This data shows us where current electric vehicle charging stations are located across the country. For my project though what I had to do was type in the area code for Erie County in order to have the map zoom into this area. It also gave me specific locations as to where a charging station is. An example of this is that there are two charging stations at Wegmans located at 675 Alberta Drive Amherst, NY 14226. An area that has a lot of charging stations is University at Buffalo's North Campus Jacobs B lot and that lot has 8 stations with 2 plugs each. 
 
 You can do bullets like this:
 
@@ -38,44 +64,11 @@ See <http://rmarkdown.rstudio.com/> for all the amazing things you can do.
 
 Here's my first code chunk.
 
-```{r}
-x=3+4
-```
 
-Refer to output in your narrative like this: x=`r x` .
-
-Load any required packages in a code chunk (you may need to install some packages):
-
-```{r, message=F, warning=F}
-library(tidyverse)
-library(leaflet)
-library(kableExtra)
-library(htmlwidgets)
-library(widgetframe)
-knitr::opts_chunk$set(widgetframe_widgets_dir = 'widgets' ) 
-knitr::opts_chunk$set(cache=TRUE)  # cache the results for quick compiling
-```
 
 ## Download and clean all required data
 
-```{r}
-n=20
-data=data.frame(x=runif(n,-180,180),
-                y=runif(n,-60,60),
-                size = runif(n, 5, 20),
-                category = factor(
-                  sample(letters[1:5], n, replace = TRUE)
-                  ),
-                value = rnorm(n))
-```
 
-```{r, results='asis'}
-data %>% 
-  slice(1:10) %>% #show only 1:n rows
-  kable(digits=2,align="c")%>% #make table and round to two digits
-  kable_styling(bootstrap_options = 
-                  c("striped", "hover", "condensed", "responsive")) #apply other formatting
-```
 
 Add any additional processing steps here.
 

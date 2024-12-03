@@ -27,6 +27,7 @@ This first line of code shows the nearest electric charging stations across Erie
 ```{r}
 library(sf)
 library(altfuelr)
+library(tidycensus)
 (nearest_stations(
   "ks60c5Uh2qpQzMoHhE3sdcYP68uJkspEFZOpd6Z2",
   latitude = 42.6975,
@@ -35,8 +36,17 @@ library(altfuelr)
   params = nrel_params(fuel_type = "ELEC")
 ))
 ```
+```{r}
+options(tigris_use_cache = TRUE)
+erie <- get_decennial(geography = "block", variables = income,
+                      state = "NY", county = "Erie County", geometry = TRUE,
+                      sumfile = "pl", cache_table=T) 
+library(mapview)
+mapview(erie_point_race, zcol = "variable", legend = TRUE)
+```
 
-Data: The underlying data are publicly accessible via the web and downloaded/accessed within the Rmd script. If you want to use your own data, you must make it available on a website (e.g. Figshare) so that others are able to re-run your code.
+
+Data: This data shows us where current electric vehicle charging stations are located across the country. For my project though what I had to do was type in the area code for Erie County in order to have the map zoom into this area. It also gave me specific locations as to where a charging station is. An example of this is that there are two charging stations at Wegmans located at 675 Alberta Drive Amherst, NY 14226. An area that has a lot of charging stations is University at Buffalo's North Campus Jacobs B lot and that lot has 8 stations with 2 plugs each. 
 
 You can do bullets like this:
 
@@ -54,44 +64,11 @@ See <http://rmarkdown.rstudio.com/> for all the amazing things you can do.
 
 Here's my first code chunk.
 
-```{r}
-x=3+4
-```
 
-Refer to output in your narrative like this: x=`r x` .
-
-Load any required packages in a code chunk (you may need to install some packages):
-
-```{r, message=F, warning=F}
-library(tidyverse)
-library(leaflet)
-library(kableExtra)
-library(htmlwidgets)
-library(widgetframe)
-knitr::opts_chunk$set(widgetframe_widgets_dir = 'widgets' ) 
-knitr::opts_chunk$set(cache=TRUE)  # cache the results for quick compiling
-```
 
 ## Download and clean all required data
 
-```{r}
-n=20
-data=data.frame(x=runif(n,-180,180),
-                y=runif(n,-60,60),
-                size = runif(n, 5, 20),
-                category = factor(
-                  sample(letters[1:5], n, replace = TRUE)
-                  ),
-                value = rnorm(n))
-```
 
-```{r, results='asis'}
-data %>% 
-  slice(1:10) %>% #show only 1:n rows
-  kable(digits=2,align="c")%>% #make table and round to two digits
-  kable_styling(bootstrap_options = 
-                  c("striped", "hover", "condensed", "responsive")) #apply other formatting
-```
 
 Add any additional processing steps here.
 
