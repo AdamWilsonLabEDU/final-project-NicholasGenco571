@@ -17,13 +17,13 @@ charging stations. With electric vehicles becoming more popular, there is a grow
 charging stations and I want to know the best locations for them. Are streets, parking lots, homes
 or sidewalks the best place to install them. I also would like to look at the specific locations that
 they will go in to decide how many charging stations will be needed to fulfill the number of cars
-that are present. The specific location I will be looking at for my project is the north eastern part of Erie County. I am looking at potentially identifying large parking lots (example Boulevard Consumer Plaza) as one of the ideal places to have charging stations.
+that are present. Knowing how many cars on average fill up a parking lot is important in determining how many charging stations are required for that lot. The specific location I will be looking at for my project is the north eastern part of Erie County. I am looking at potentially identifying large parking lots (example Boulevard Consumer Plaza) as one of the ideal places to have charging stations. There are of course other large parking lots across Erie County but I didn't want to include every single one. I am also only looking at electric car charging stations as there are other fuel types out there that have their own charging stations or pumps for a specific type of vehicle. 
 
 # Materials and methods
 
 \[\~ 200 words\]
 
-This first line of code shows the nearest electric charging stations across Erie County New York. There are certain areas in the county that have little to no electric charging stations including Kenmore, Lackawanna, areas south of Hamburg, Buffalo's East Side and areas east of Amherst and Williamsville. Areas that have a good amount of electric charging stations include parts of Downtown Buffalo, Cheektowaga, and Amherst. 
+This first line of code shows the nearest electric charging stations across Erie County New York. There are certain areas in the county that have little to no electric charging stations including Kenmore, Lackawanna, areas south of Hamburg, Buffalo's East Side and areas east of Amherst and Williamsville. Areas that have a good amount of electric charging stations include parts of Downtown Buffalo, Cheektowaga, and Amherst. The second line of code represents the movable map that you can use to locate electric charging stations not just in Erie County but all over Western New York and if you were curious about another state or city, you could do that to. You can also change the type of fuel you want to locate such as Biodiesel, Compressed Natural Gas, Ethanol, Hydrogen, Liquefied Natural Gas, Propane, and Renewable Diesel. In the third line of code, I am using a pin to give the latitude and longitude of the location where I want electric charging stations. Since the map already has it's own pins as to where current charging stations exist, I decided to create my own pins in order to locate places where I believe electric charging stations are best suited for. 
 ```{r}
 library(sf)
 library(altfuelr)
@@ -41,8 +41,32 @@ options(tigris_use_cache = TRUE)
 erie <- get_decennial(geography = "block", variables = income,
                       state = "NY", county = "Erie County", geometry = TRUE,
                       sumfile = "pl", cache_table=T) 
-library(mapview)
-mapview(erie_point_race, zcol = "variable", legend = TRUE)
+leaflet() %>%
+  addTiles() %>%
+  addCircleMarkers(data = electric,
+                   color= "green",
+                   radius = 300,
+                   popup = ~paste("electric<br>", as.character(geometry))) %>%
+```
+```{r}
+location_data <- data.frame(
+  location_name = c("Boulevard Consumer Plaza"),
+  longitude = c(-78.82234),
+  latitude = c(42.99937),
+)
+# Load a base map (e.g., US states)
+
+us_map <- map_data("state") 
+
+# Create the map with a pin at the specified location
+
+ggplot() +
+
+  geom_polygon(data = us_map, aes(x = long, y = lat, group = group), fill = "gray", color = "black") + 
+
+  geom_point(data = location_data, aes(x = longitude, y = latitude), color = "red", size = 3) + 
+
+  coord_fixed() 
 ```
 
 
@@ -106,8 +130,10 @@ dygraph(nhtemp, main = "New Haven Temperatures") |>
 
 \[\~200 words\]
 
-Clear summary adequately describing the results and putting them in context. Discussion of further questions and ways to continue investigation.
+In conclusion, I believe that the places that would be the most suitable for electric charging stations are places that receive a lot of foot traffic such as the Boulevard Consumer Plaza since that area receives a lot of cars. Another possible location where I believe charging stations would be suitable are local schools and Universities since they are more likely to be concerned with their CO2 emissions. The University at Buffalo is a perfect example of a college who would want to have electric charging stations in their parking lots since they have a goal of making the campus carbon free. In order to do that they'll need people to drive electric vehicles and utilize the charging stations that are available in the parking lots. An area that I determined would not be ideal for charging stations are malls with two well known examples in Western New York being the Eastern Hills Mall and the Boulevard Mall since those are considered dead malls and don't receive a lot of visitors making it worthless even having them be located there. There were other places such as grocery stores parking lots, and gas stations that I considered as possible locations for charging stations but I ended up not going with those places. 
 
 # References
 
-All sources are cited in a consistent manner
+https://developer.nrel.gov/docs/transportation/alt-fuel-stations-v1/
+https://afdc.energy.gov/stations#/find/nearest?location=14226&fuel=ELEC
+
