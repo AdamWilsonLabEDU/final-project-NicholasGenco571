@@ -1,0 +1,113 @@
+---
+title: "Suitable places for electric charging stations in Erie County"
+author: Nicholas Genco
+subtitle: Subtitle here if desired
+date: today
+date-format: long
+editor_options: 
+  chunk_output_type: console
+---
+
+# Introduction
+
+\[\~ 200 words\]
+
+For my project, I want to look at where are the best places would be to put electric
+charging stations. With electric vehicles becoming more popular, there is a growing demand for
+charging stations and I want to know the best locations for them. Are streets, parking lots, homes
+or sidewalks the best place to install them. I also would like to look at the specific locations that
+they will go in to decide how many charging stations will be needed to fulfill the number of cars
+that are present. The specific location I will be looking at for my project is the north eastern part of Erie County. I am looking at potentially identifying large parking lots (example Boulevard Consumer Plaza) as one of the ideal places to have charging stations.
+
+# Materials and methods
+
+\[\~ 200 words\]
+
+This first line of code shows the nearest electric charging stations across Erie County New York. There are certain areas in the county that have little to no electric charging stations including Kenmore, Lackawanna, areas south of Hamburg, Buffalo's East Side and areas east of Amherst and Williamsville. Areas that have a good amount of electric charging stations include parts of Downtown Buffalo, Cheektowaga, and Amherst. 
+```{r}
+library(sf)
+library(altfuelr)
+library(tidycensus)
+(nearest_stations(
+  "ks60c5Uh2qpQzMoHhE3sdcYP68uJkspEFZOpd6Z2",
+  latitude = 42.6975,
+  longitude = -78.7476,
+  radius = 300,
+  params = nrel_params(fuel_type = "ELEC")
+))
+```
+```{r}
+options(tigris_use_cache = TRUE)
+erie <- get_decennial(geography = "block", variables = income,
+                      state = "NY", county = "Erie County", geometry = TRUE,
+                      sumfile = "pl", cache_table=T) 
+library(mapview)
+mapview(erie_point_race, zcol = "variable", legend = TRUE)
+```
+
+
+Data: This data shows us where current electric vehicle charging stations are located across the country. For my project though what I had to do was type in the area code for Erie County in order to have the map zoom into this area. It also gave me specific locations as to where a charging station is. An example of this is that there are two charging stations at Wegmans located at 675 Alberta Drive Amherst, NY 14226. An area that has a lot of charging stations is University at Buffalo's North Campus Jacobs B lot and that lot has 8 stations with 2 plugs each. 
+
+You can do bullets like this:
+
+-   The first most important thing
+-   The second most important thing
+-   The third most important thing
+
+You can do numbers like this:
+
+1.  The first most important thing
+2.  The second most important thing
+3.  The third most important thing
+
+See <http://rmarkdown.rstudio.com/> for all the amazing things you can do.
+
+Here's my first code chunk.
+
+
+
+## Download and clean all required data
+
+
+
+Add any additional processing steps here.
+
+# Results
+
+\[\~200 words\]
+
+Tables and figures (maps and other graphics) are carefully planned to convey the results of your analysis. Intense exploration and evidence of many trials and failures. The author looked at the data in many different ways before coming to the final presentation of the data.
+
+Show tables, plots, etc. and describe them.
+
+```{r, fig.width=6, fig.height=3, fig.cap="Map of completely random data"}
+m <- leaflet(data) %>% 
+  addTiles() %>% 
+  addCircleMarkers(~x, ~y, radius = ~size,color = ~as.factor(category)) %>% 
+  addPopups(~x[2], ~y[2], "Random popup")
+m  # a map with the default OSM tile layer
+```
+
+```{r}
+data %>% 
+  ggplot(aes(x=x,y=y,col=category))+
+  geom_point()
+```
+
+### Dygraphs Example
+
+```{r}
+library(dygraphs)
+dygraph(nhtemp, main = "New Haven Temperatures") |> 
+  dyRangeSelector(dateWindow = c("1920-01-01", "1960-01-01")) 
+```
+
+# Conclusions
+
+\[\~200 words\]
+
+Clear summary adequately describing the results and putting them in context. Discussion of further questions and ways to continue investigation.
+
+# References
+
+All sources are cited in a consistent manner
